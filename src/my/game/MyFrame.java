@@ -14,7 +14,7 @@ public class MyFrame extends Frame {
 	
 	public void launchFrame() {
 		//设置窗口参数
-		setSize(Constant.FrameWidth,Constant.FrameHeight);
+		setSize(Constant.FRAME_WIDTH,Constant.FRAME_HEIGHT);
 		setLocation(100,100);
 		setVisible(true);
 		//启动线程
