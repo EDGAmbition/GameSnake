@@ -7,11 +7,14 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class MyFrame extends Frame { 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 402298709346937645L;
 	
+	int level; 
+
+	public MyFrame(){
+		super();
+		level = 1000;
+	}
 	public void launchFrame() {
 		//设置窗口参数
 		setSize(Constant.FRAME_WIDTH,Constant.FRAME_HEIGHT);
@@ -34,7 +37,7 @@ public class MyFrame extends Frame {
 			while(true) {
 				repaint();
 				try {
-					Thread.sleep(40);
+					Thread.sleep(level);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}  
