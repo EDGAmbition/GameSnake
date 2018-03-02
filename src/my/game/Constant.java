@@ -9,10 +9,10 @@ public class Constant {
 	public static final int SNAKE_WIDTH = 15;
 	public static final int SNAKE_HEIGHT = 15; 
 	
-	public final static int GRID_WIDTH = 30;
-	public final static int GRID_HEIGHT = 30;
+//	public final static int GRID_WIDTH = 30;
+//	public final static int GRID_HEIGHT = 30;
 	
-	public static final boolean isSnake = true;	
+	public static final boolean IS_SNAKE = true;	
 	
 	
 }

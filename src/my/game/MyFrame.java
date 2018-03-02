@@ -13,7 +13,7 @@ public class MyFrame extends Frame {
 
 	public MyFrame(){
 		super();
-		level = 1000;
+		level = 100;
 	}
 	public void launchFrame() {
 		//设置窗口参数

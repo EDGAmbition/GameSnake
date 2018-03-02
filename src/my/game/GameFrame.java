@@ -12,22 +12,90 @@ public class GameFrame extends MyFrame{
 	private static final long serialVersionUID = -4456516978889554848L;
 	
 	LinkedList<Snake> snakeBody= new LinkedList<Snake>();
+	Food f = new Food();
+	boolean gameEnd =false;
 	
 	public void launchFrame() {
 		super.launchFrame();
 		addKeyListener(new KeyMonitor());
-		snakeBody.add(new Snake(15,5));
-		snakeBody.add(new Snake(16,5));
-		snakeBody.add(new Snake(17,5));
+		Init();
 	}
 	
 	public void paint(Graphics g) {
-		drawBound(g); //»­±ß½ç
+		if(gameEnd == false) {
+			drawBound(g); //»­±ß½ç	
+			moveAndEat(); //ÒÆ¶¯Éß			
+			drawSnake(g); //»­Éß						
+			f.drawFood(g);//»­³ÔµÄ
+		}
+		else {
+			g.drawString("Game Over", 150, 150);
+		}
+	}
+	private void drawSnake(Graphics g) {
 		for(Iterator<Snake> i = snakeBody.iterator();i.hasNext();) {
-			Snake s = i.next();
-			s.drawSnake(g);
+			Snake s2 = i.next();
+			s2.drawSnake(g);
+		}
+	}
+	private boolean gameOver(Snake s){
+		return (s.x>=40 ||s.x<10 || s.y>=36 || s.y<6) || Grid.grid[s.y][s.x];
+	}
+
+	
+	/**
+	 * ¼üÅÌ¼àÌý
+	 * @param args
+	 */
+	class KeyMonitor extends KeyAdapter{
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			System.out.println(arg0.getKeyCode());
+			int temp = arg0.getKeyCode();
+			Snake.changeDirection(temp);
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			
 		}
 		
+	}
+	
+	private void Init() {
+		snakeBody.add(new Snake(20,10));
+		snakeBody.add(new Snake(21,10));
+		snakeBody.add(new Snake(22,10));
+		f.newFood();
+		setGrid();
+		gameEnd =false;
+	}
+	
+	private void setGrid() {
+		for(int i=6;i<=35;i++) {
+			for(int j=10;j<39;j++) {
+				Grid.grid[i][j] =false;
+			}
+		}
+		for(Iterator<Snake> i = snakeBody.iterator();i.hasNext();) {
+			Snake s = i.next();
+			Grid.grid[s.y][s.x] = true;
+		}
+	}
+	
+	private void drawBound(Graphics g) {
+		Color old=g.getColor();
+		g.setColor(Color.black);
+		g.drawRect(
+					 150,
+					 90,
+					 Constant.GAME_FRAME_WIDTH,
+					 Constant.GAME_FRAME_HEIGHT
+				 	); 
+		g.setColor(old);
+	}
+	private void moveAndEat() {
 		Snake s = new Snake(snakeBody.getFirst().x , snakeBody.getFirst().y);
 		switch(Snake.direction) {
 			case 37:
@@ -44,70 +112,21 @@ public class GameFrame extends MyFrame{
 				break;
 		}
 		snakeBody.addFirst(s);
-		snakeBody.removeLast();
-		/*
-		Image img1=GameUtil.getImage("images/tushe.png");
-		for(int i=3;i<=17;i++){
-		g.drawImage(img1, 
-				10 * Constant.GRID_WIDTH, 
-				i * Constant.GRID_HEIGHT, 
-				null
-				);
-		}
-		*/
-	}
-	
-	
-	/**
-	 * »­±ß½ç
-	 * @param g
-	 */
-	private void drawBound(Graphics g) {
-		Color old=g.getColor();
-		g.setColor(Color.black);
-		g.drawRect(
-					 150,
-					 90,
-					 Constant.GAME_FRAME_WIDTH,
-					 Constant.GAME_FRAME_HEIGHT
-				 	); 
-		g.setColor(old);
-	}
-	
-	
-	/**
-	 * ¼üÅÌ¼àÌý
-	 * @param args
-	 */
-	class KeyMonitor extends KeyAdapter{
-
-		@Override
-		public void keyPressed(KeyEvent arg0) {
-			System.out.println(arg0.getKeyCode());
-			int temp = arg0.getKeyCode();
-			if(Math.abs(temp - Snake.direction )!= 2) {
-				switch(temp) {
-				case 37:
-					Snake.direction=37; //left
-					break;
-				case 38:
-					Snake.direction=38; //up
-					break;
-				case 39:
-					Snake.direction=39; //right
-					break;
-				case 40:
-					Snake.direction=40; //down
-					break;
-				}
-			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {
+		if(gameOver(s)) {
+			System.out.println("Game Over");
+			gameEnd= true;
 			
 		}
+		else
+			Grid.grid[s.y][s.x] = true;
 		
+		if(snakeBody.getFirst().x == f.x && snakeBody.getFirst().y == f.y ) {
+			f.newFood();			
+		}
+		else {
+			Snake tempRemove = snakeBody.removeLast();
+			Grid.grid[tempRemove.y][tempRemove.x] = false;
+		}
 	}
 	public static void main(String[] args) {
 		GameFrame gf = new GameFrame();
